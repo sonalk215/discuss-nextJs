@@ -1,5 +1,6 @@
 import type { Comment } from "@prisma/client";
 import { db } from "@/db";
+import { cache } from "react";
 
 export type CommentWithAuthor = (
   Comment & {
@@ -8,7 +9,7 @@ export type CommentWithAuthor = (
   }
 )
 
-export const fetchCommentsByPostId = (postId: string): Promise<CommentWithAuthor[]> => {
+export const fetchCommentsByPostId = cache((postId: string): Promise<CommentWithAuthor[]> => {
   return db.comment.findMany({
     where: {postId },
     include: {
@@ -20,4 +21,4 @@ export const fetchCommentsByPostId = (postId: string): Promise<CommentWithAuthor
       }
     }
   })
-}
+})
