@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import PostShow from "@/components/posts/post-show";
 import CommentList from "@/components/comments/comment-list";
 import CommentCreateForm from "@/components/comments/comment-create-form";
 import paths from "@/paths";
-import { fetchCommentsByPostId } from "@/db/queries/comments";
+import PostShowLoading from "@/components/posts/post-show-loading";
+// import { fetchCommentsByPostId } from "@/db/queries/comments";
 
 interface PostShowPageProps {
   params: Promise<{
@@ -20,9 +22,12 @@ const PostShowPage = async ({ params }: PostShowPageProps) => {
       <Link className="underline decoration-solid" href={paths.topicShow(slug)}>
         {"< "}Back to {slug}
       </Link>
-      <PostShow postId={postId} />
+      <Suspense fallback={<PostShowLoading />}>
+        <PostShow postId={postId} />
+      </Suspense>
       <CommentCreateForm postId={postId} startOpen />
-      <CommentList fetchData={() => fetchCommentsByPostId(postId)} />
+      {/* <CommentList fetchData={() => fetchCommentsByPostId(postId)} /> */}
+      <CommentList postId={postId} />
     </div>
   );
 }
