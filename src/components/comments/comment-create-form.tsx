@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, startTransition } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Textarea, Button } from "@nextui-org/react";
+import { Textarea, Button, Form } from "@nextui-org/react";
 import FormButton from "@/components/common/form-button";
 import * as actions from "@/actions";
 
@@ -24,6 +24,14 @@ export default function CommentCreateForm({
     { errors: {} }
   );
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    startTransition(() => {
+      action(formData);
+    });
+  }
+
   useEffect(() => {
     if (formState.success) {
       ref.current?.reset();
@@ -35,7 +43,7 @@ export default function CommentCreateForm({
   }, [formState, startOpen]);
 
   const form = (
-    <form action={action} ref={ref}>
+    <Form onSubmit={handleSubmit} ref={ref}>
       <div className="space-y-2 px-1">
         <Textarea
           name="content"
@@ -53,7 +61,7 @@ export default function CommentCreateForm({
 
         <FormButton isLoading={isPending}>Create Comment</FormButton>
       </div>
-    </form>
+    </Form>
   );
 
   return (

@@ -1,13 +1,15 @@
+import type { CommentWithAuthor } from "@/db/queries/comments";
 import Image from "next/image";
-import { Button } from "@nextui-org/react";
+// import { Button } from "@nextui-org/react";
 import CommentCreateForm from "@/components/comments/comment-create-form";
 
 interface CommentShowProps {
   commentId: string;
+  comments: CommentWithAuthor[];
 }
 
 // TODO: Get a list of comments
-export default function CommentShow({ commentId }: CommentShowProps) {
+const CommentShow = ({ commentId, comments }: CommentShowProps) => {
   const comment = comments.find((c) => c.id === commentId);
 
   if (!comment) {
@@ -44,3 +46,5 @@ export default function CommentShow({ commentId }: CommentShowProps) {
     </div>
   );
 }
+
+export default CommentShow;
